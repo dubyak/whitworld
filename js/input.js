@@ -55,6 +55,7 @@ const InputSystem = (() => {
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 touchState[dir] = true;
+                justPressed[dir] = true;
             }, { passive: false });
             btn.addEventListener('touchend', (e) => {
                 e.preventDefault();
@@ -68,6 +69,7 @@ const InputSystem = (() => {
             btn.addEventListener('mousedown', (e) => {
                 e.preventDefault();
                 touchState[dir] = true;
+                justPressed[dir] = true;
             });
             btn.addEventListener('mouseup', (e) => {
                 e.preventDefault();
@@ -86,6 +88,7 @@ const InputSystem = (() => {
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 touchState[action] = true;
+                justPressed[action] = true;
             }, { passive: false });
             btn.addEventListener('touchend', (e) => {
                 e.preventDefault();
@@ -99,6 +102,7 @@ const InputSystem = (() => {
             btn.addEventListener('mousedown', (e) => {
                 e.preventDefault();
                 touchState[action] = true;
+                justPressed[action] = true;
             });
             btn.addEventListener('mouseup', (e) => {
                 e.preventDefault();
@@ -144,11 +148,11 @@ const InputSystem = (() => {
     function wasJustPressed(action) {
         switch (action) {
             case 'jump':
-                return justPressed['Space'] || justPressed['ArrowUp'] || justPressed['KeyW'];
+                return justPressed['Space'] || justPressed['ArrowUp'] || justPressed['KeyW'] || justPressed['jump'];
             case 'interact':
-                return justPressed['KeyE'] || justPressed['KeyF'];
+                return justPressed['KeyE'] || justPressed['KeyF'] || justPressed['interact'];
             case 'pause':
-                return justPressed['Escape'] || justPressed['KeyP'];
+                return justPressed['Escape'] || justPressed['KeyP'] || justPressed['pause'];
             default:
                 return false;
         }

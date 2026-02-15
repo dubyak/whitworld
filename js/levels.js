@@ -72,53 +72,53 @@ const Levels = (() => {
         // Generate shelves across the full level length
         // Zone 1: Cozy start (300–3000)
         platforms.push(
-            new Platform(300, groundY - 80, 160, 15, 'shelf'),
+            new Platform(300, groundY - 95, 160, 15, 'shelf'),
             new Platform(600, groundY - 120, 140, 15, 'shelf'),
-            new Platform(900, groundY - 70, 150, 15, 'shelf'),
-            new Platform(1200, groundY - 100, 180, 15, 'shelf'),
-            new Platform(1550, groundY - 75, 140, 15, 'shelf'),
+            new Platform(900, groundY - 90, 150, 15, 'shelf'),
+            new Platform(1200, groundY - 110, 180, 15, 'shelf'),
+            new Platform(1550, groundY - 95, 140, 15, 'shelf'),
             new Platform(1800, groundY - 115, 160, 15, 'shelf'),
-            new Platform(2100, groundY - 85, 130, 15, 'shelf'),
-            new Platform(2400, groundY - 100, 200, 15, 'shelf'),
-            new Platform(2700, groundY - 70, 120, 15, 'shelf'),
+            new Platform(2100, groundY - 100, 130, 15, 'shelf'),
+            new Platform(2400, groundY - 110, 200, 15, 'shelf'),
+            new Platform(2700, groundY - 90, 120, 15, 'shelf'),
         );
         // Zone 2: Tighter platforming (3000–6000)
         platforms.push(
-            new Platform(3100, groundY - 90, 130, 15, 'shelf'),
+            new Platform(3100, groundY - 95, 130, 15, 'shelf'),
             new Platform(3400, groundY - 110, 150, 15, 'shelf'),
-            new Platform(3700, groundY - 75, 120, 15, 'shelf'),
+            new Platform(3700, groundY - 90, 120, 15, 'shelf'),
             new Platform(4000, groundY - 105, 180, 15, 'shelf'),
-            new Platform(4350, groundY - 80, 160, 15, 'shelf'),
+            new Platform(4350, groundY - 95, 160, 15, 'shelf'),
             new Platform(4650, groundY - 120, 140, 15, 'shelf'),
-            new Platform(4950, groundY - 70, 130, 15, 'shelf'),
+            new Platform(4950, groundY - 90, 130, 15, 'shelf'),
             new Platform(5250, groundY - 95, 200, 15, 'shelf'),
             new Platform(5550, groundY - 110, 150, 15, 'shelf'),
-            new Platform(5850, groundY - 80, 120, 15, 'shelf'),
+            new Platform(5850, groundY - 95, 120, 15, 'shelf'),
         );
         // Zone 3: More challenging (6000–9000)
         platforms.push(
-            new Platform(6100, groundY - 85, 140, 15, 'shelf'),
+            new Platform(6100, groundY - 90, 140, 15, 'shelf'),
             new Platform(6400, groundY - 115, 130, 15, 'shelf'),
-            new Platform(6750, groundY - 70, 160, 15, 'shelf'),
+            new Platform(6750, groundY - 95, 160, 15, 'shelf'),
             new Platform(7050, groundY - 100, 180, 15, 'shelf'),
             new Platform(7400, groundY - 90, 150, 15, 'shelf'),
-            new Platform(7700, groundY - 75, 120, 15, 'shelf'),
+            new Platform(7700, groundY - 95, 120, 15, 'shelf'),
             new Platform(8000, groundY - 110, 200, 15, 'shelf'),
-            new Platform(8350, groundY - 85, 140, 15, 'shelf'),
+            new Platform(8350, groundY - 90, 140, 15, 'shelf'),
             new Platform(8650, groundY - 100, 160, 15, 'shelf'),
         );
         // Zone 4: Final stretch (9000–12800)
         platforms.push(
-            new Platform(9100, groundY - 80, 150, 15, 'shelf'),
+            new Platform(9100, groundY - 95, 150, 15, 'shelf'),
             new Platform(9450, groundY - 105, 130, 15, 'shelf'),
-            new Platform(9750, groundY - 70, 180, 15, 'shelf'),
+            new Platform(9750, groundY - 90, 180, 15, 'shelf'),
             new Platform(10100, groundY - 95, 160, 15, 'shelf'),
             new Platform(10450, groundY - 110, 140, 15, 'shelf'),
-            new Platform(10800, groundY - 75, 200, 15, 'shelf'),
+            new Platform(10800, groundY - 90, 200, 15, 'shelf'),
             new Platform(11100, groundY - 100, 130, 15, 'shelf'),
-            new Platform(11450, groundY - 85, 150, 15, 'shelf'),
+            new Platform(11450, groundY - 95, 150, 15, 'shelf'),
             new Platform(11800, groundY - 115, 160, 15, 'shelf'),
-            new Platform(12100, groundY - 80, 180, 15, 'shelf'),
+            new Platform(12100, groundY - 90, 180, 15, 'shelf'),
         );
 
         // Obstacles across the entire level
@@ -272,19 +272,19 @@ const Levels = (() => {
             // ===== UPSTAIRS (0-3200) =====
             new Platform(0, groundY, 3200, 60, 'ground'),
             // Bedroom furniture
-            new Platform(150, groundY - 75, 130, 15, 'shelf'),
-            new Platform(400, groundY - 95, 120, 15, 'shelf'),
-            new Platform(600, groundY - 70, 140, 15, 'shelf'),
+            new Platform(150, groundY - 95, 130, 15, 'shelf'),
+            new Platform(400, groundY - 105, 120, 15, 'shelf'),
+            new Platform(600, groundY - 90, 140, 15, 'shelf'),
             // Hallway platforms
-            new Platform(900, groundY - 85, 120, 15, 'shelf'),
-            new Platform(1200, groundY - 100, 150, 15, 'shelf'),
-            new Platform(1500, groundY - 75, 130, 15, 'shelf'),
+            new Platform(900, groundY - 95, 120, 15, 'shelf'),
+            new Platform(1200, groundY - 110, 150, 15, 'shelf'),
+            new Platform(1500, groundY - 90, 130, 15, 'shelf'),
             // Living room platforms
-            new Platform(1800, groundY - 90, 160, 15, 'shelf'),
-            new Platform(2100, groundY - 70, 140, 15, 'shelf'),
+            new Platform(1800, groundY - 100, 160, 15, 'shelf'),
+            new Platform(2100, groundY - 90, 140, 15, 'shelf'),
             new Platform(2400, groundY - 105, 130, 15, 'shelf'),
-            new Platform(2700, groundY - 80, 150, 15, 'shelf'),
-            new Platform(3000, groundY - 95, 120, 15, 'shelf'),
+            new Platform(2700, groundY - 95, 150, 15, 'shelf'),
+            new Platform(3000, groundY - 100, 120, 15, 'shelf'),
 
             // ===== STAIRS (3200-3600) =====
             new Platform(3200, groundY - 25, 80, 25, 'stairs'),
@@ -296,32 +296,32 @@ const Levels = (() => {
             new Platform(3440, downstairsY, 7760, 60, 'ground'),
 
             // Hallway platforms
-            new Platform(3700, downstairsY - 85, 140, 15, 'counter'),
-            new Platform(4000, downstairsY - 70, 130, 15, 'shelf'),
-            new Platform(4300, downstairsY - 95, 160, 15, 'counter'),
-            new Platform(4650, downstairsY - 75, 120, 15, 'shelf'),
+            new Platform(3700, downstairsY - 95, 140, 15, 'counter'),
+            new Platform(4000, downstairsY - 90, 130, 15, 'shelf'),
+            new Platform(4300, downstairsY - 105, 160, 15, 'counter'),
+            new Platform(4650, downstairsY - 95, 120, 15, 'shelf'),
             // Dining room
-            new Platform(5000, downstairsY - 85, 180, 15, 'counter'),
-            new Platform(5350, downstairsY - 70, 150, 15, 'shelf'),
+            new Platform(5000, downstairsY - 95, 180, 15, 'counter'),
+            new Platform(5350, downstairsY - 90, 150, 15, 'shelf'),
             new Platform(5700, downstairsY - 100, 140, 15, 'counter'),
             // Family room
-            new Platform(6050, downstairsY - 80, 160, 15, 'shelf'),
-            new Platform(6400, downstairsY - 90, 130, 15, 'counter'),
-            new Platform(6750, downstairsY - 70, 150, 15, 'shelf'),
+            new Platform(6050, downstairsY - 95, 160, 15, 'shelf'),
+            new Platform(6400, downstairsY - 100, 130, 15, 'counter'),
+            new Platform(6750, downstairsY - 90, 150, 15, 'shelf'),
             // Kitchen area
-            new Platform(7100, downstairsY - 85, 200, 15, 'counter'),
-            new Platform(7500, downstairsY - 75, 140, 15, 'counter'),
-            new Platform(7850, downstairsY - 95, 160, 15, 'counter'),
+            new Platform(7100, downstairsY - 95, 200, 15, 'counter'),
+            new Platform(7500, downstairsY - 90, 140, 15, 'counter'),
+            new Platform(7850, downstairsY - 105, 160, 15, 'counter'),
             // Laundry / utility room
-            new Platform(8200, downstairsY - 70, 130, 15, 'shelf'),
-            new Platform(8550, downstairsY - 85, 150, 15, 'counter'),
-            new Platform(8900, downstairsY - 100, 180, 15, 'counter'),
+            new Platform(8200, downstairsY - 90, 130, 15, 'shelf'),
+            new Platform(8550, downstairsY - 95, 150, 15, 'counter'),
+            new Platform(8900, downstairsY - 110, 180, 15, 'counter'),
             // Final stretch to battery
-            new Platform(9300, downstairsY - 75, 140, 15, 'shelf'),
-            new Platform(9650, downstairsY - 90, 160, 15, 'counter'),
-            new Platform(10000, downstairsY - 80, 130, 15, 'shelf'),
-            new Platform(10400, downstairsY - 95, 200, 15, 'counter'),
-            new Platform(10800, downstairsY - 70, 150, 15, 'counter'),
+            new Platform(9300, downstairsY - 95, 140, 15, 'shelf'),
+            new Platform(9650, downstairsY - 100, 160, 15, 'counter'),
+            new Platform(10000, downstairsY - 90, 130, 15, 'shelf'),
+            new Platform(10400, downstairsY - 105, 200, 15, 'counter'),
+            new Platform(10800, downstairsY - 90, 150, 15, 'counter'),
         ];
 
         // Obstacles
