@@ -394,11 +394,12 @@ const GameEngine = (() => {
 
     function drawBackground() {
         // Gradient background
-        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        // Adjusted to follow camera Y (vertical scrolling) to prevent smearing
+        const grad = ctx.createLinearGradient(0, cameraY, 0, cameraY + canvas.height);
         grad.addColorStop(0, level.bgColor);
         grad.addColorStop(1, level.bgAccent);
         ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, cameraY, canvas.width, canvas.height);
 
         const time = performance.now() / 1000;
         const theme = level.theme || 'basement';
