@@ -446,7 +446,8 @@ const Levels = (() => {
             maxCatches: s.maxCatches,
             winMessage: "You changed the batteries! Whit is rocking out! 🎸🎶",
             loseMessage: "Whit grabbed the guitar and ran away crying... 😭🎸",
-            difficulty
+            difficulty,
+            startHolding: 'guitar'
         };
     }
 

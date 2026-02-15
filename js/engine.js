@@ -62,6 +62,9 @@ const GameEngine = (() => {
         // Give brief spawn invincibility
         player.invincible = true;
         player.invincibleTimer = 2000;
+        if (level.startHolding) {
+            player.holding = level.startHolding;
+        }
 
         cameraX = 0;
         cameraY = 0;

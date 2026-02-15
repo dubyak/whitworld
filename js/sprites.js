@@ -47,10 +47,48 @@ const Sprites = (() => {
         ctx.closePath();
     }
 
+    // Toy Guitar (Yellow with flashing lights)
+    function drawHeldGuitar(ctx, x, y) {
+        const t = performance.now();
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(-0.5); // Angled up
+
+        // Body
+        ctx.fillStyle = '#facc15'; // Yellow
+        ctx.beginPath();
+        ctx.ellipse(10, 5, 12, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(10, -2, 9, 7, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Neck
+        ctx.fillStyle = '#a16207'; // Brown
+        ctx.fillRect(-10, -4, 20, 5);
+
+        // Headstock
+        ctx.fillStyle = '#facc15';
+        ctx.fillRect(-14, -5, 6, 7);
+
+        // Flashing Lights
+        const flash1 = Math.sin(t * 0.01) > 0 ? '#ef4444' : '#fee2e2'; // Red
+        const flash2 = Math.sin(t * 0.01 + 2) > 0 ? '#3b82f6' : '#dbeafe'; // Blue
+
+        ctx.fillStyle = flash1;
+        ctx.beginPath(); ctx.arc(8, 2, 2, 0, Math.PI * 2); ctx.fill();
+
+        ctx.fillStyle = flash2;
+        ctx.beginPath(); ctx.arc(14, 2, 2, 0, Math.PI * 2); ctx.fill();
+
+        ctx.restore();
+    }
+
     // ------------------------------------------------------------------
     // Character Drawing Logic (Vector)
     // ------------------------------------------------------------------
-    function drawCharacter(ctx, type, state, w, h) {
+    function drawCharacter(ctx, type, state, w, h, holding) {
         const isIngrid = type === 'ingrid';
         const t = performance.now() / 1000;
 
@@ -128,12 +166,17 @@ const Sprites = (() => {
 
         // Arm Anim
         let lArmRot = 0, rArmRot = 0;
-        if (state.includes('run')) { lArmRot = rLegRot * 1.5; rArmRot = lLegRot * 1.5; }
-        else if (state === 'jump') { lArmRot = -2.5; rArmRot = 2.5; } // Cheer
-        else if (state === 'cry') { lArmRot = -0.5; rArmRot = 0.5; } // Hands to face
 
-        // Left Arm (behind body? no, side view usually implies one visible or both)
-        // Let's draw both on sides
+        if (holding === 'guitar') {
+            lArmRot = -0.8;
+            rArmRot = -1.2;
+        } else {
+            if (state.includes('run')) { lArmRot = rLegRot * 1.5; rArmRot = lLegRot * 1.5; }
+            else if (state === 'jump') { lArmRot = -2.5; rArmRot = 2.5; } // Cheer
+            else if (state === 'cry') { lArmRot = -0.5; rArmRot = 0.5; } // Hands to face
+        }
+
+        // Left Arm
         ctx.save();
         ctx.translate(-bodyW * 0.6, bodyY + bodyH * 0.2);
         ctx.rotate(lArmRot);
@@ -141,6 +184,12 @@ const Sprites = (() => {
         ctx.fill();
         ctx.restore();
 
+        // Draw Held Object (Guitar)
+        if (holding === 'guitar') {
+            drawHeldGuitar(ctx, 0, bodyY + bodyH * 0.6);
+        }
+
+        // Right Arm
         ctx.save();
         ctx.translate(bodyW * 0.6, bodyY + bodyH * 0.2);
         ctx.rotate(rArmRot);
@@ -150,7 +199,7 @@ const Sprites = (() => {
 
         // --- HEAD ---
         const headSz = w * 0.65; // Big head
-        const headY = bodyY - headSz * 0.85;
+        const headY = bodyY - headSz * 0.5 + 4; // Lowered: Overlap body slightly
 
         // Neck (tiny)
         ctx.fillStyle = isIngrid ? PAL.ingrid_skin : PAL.whit_skin;
@@ -251,11 +300,11 @@ const Sprites = (() => {
     // Public Renderers
     // ------------------------------------------------------------------
 
-    function drawIngrid(ctx, x, y, state) {
+    function drawIngrid(ctx, x, y, state, holding) {
         const w = 48, h = 64;
         ctx.save();
         ctx.translate(x, y);
-        drawCharacter(ctx, 'ingrid', state, w, h);
+        drawCharacter(ctx, 'ingrid', state, w, h, holding);
         ctx.restore();
     }
 

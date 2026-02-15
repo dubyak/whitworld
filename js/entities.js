@@ -56,6 +56,7 @@ class Player extends Entity {
         this.interactTarget = null;
         this.carrying = null; // for battery challenge
         this.flashTimer = 0;
+        this.holding = null; // 'guitar'
     }
 
     update(dt, platforms, difficulty) {
@@ -167,9 +168,9 @@ class Player extends Entity {
             // Flip around center of sprite
             ctx.translate(drawX + 48, 0); // 48 is sprite width
             ctx.scale(-1, 1);
-            Sprites.drawIngrid(ctx, 0, drawY, this.state);
+            Sprites.drawIngrid(ctx, 0, drawY, this.state, this.holding);
         } else {
-            Sprites.drawIngrid(ctx, drawX, drawY, this.state);
+            Sprites.drawIngrid(ctx, drawX, drawY, this.state, this.holding);
         }
         ctx.restore();
 
