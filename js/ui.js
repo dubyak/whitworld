@@ -208,8 +208,7 @@ const UI = (() => {
         if (ingridCanvas) {
             const ictx = ingridCanvas.getContext('2d');
             ictx.clearRect(0, 0, 64, 64);
-            const ingridSprite = Sprites.getIngrid('stand', 3);
-            ictx.drawImage(ingridSprite, 8, 4);
+            Sprites.drawIngrid(ictx, 8, 4, 'stand');
         }
 
         // Draw Whit
@@ -217,8 +216,7 @@ const UI = (() => {
         if (whitCanvas) {
             const wctx = whitCanvas.getContext('2d');
             wctx.clearRect(0, 0, 48, 48);
-            const whitSprite = Sprites.getWhit('happy', 3);
-            wctx.drawImage(whitSprite, 5, 2);
+            Sprites.drawWhit(wctx, 5, 2, 'happy');
         }
     }
 
@@ -246,12 +244,10 @@ const UI = (() => {
             Sprites.drawWashingMachine(pctx, 220, 50, 45, 45);
 
             // Mini Ingrid
-            const ingrid = Sprites.getIngrid('run1', 2);
-            pctx.drawImage(ingrid, 10, 58);
+            Sprites.drawIngrid(pctx, 10, 58, 'run1');
 
             // Mini Whit (crying next to washer)
-            const whit = Sprites.getWhit('cry', 2);
-            pctx.drawImage(whit, 235, 60);
+            Sprites.drawWhit(pctx, 235, 60, 'cry');
 
             // Arrow
             pctx.fillStyle = '#ffe66d';
@@ -284,12 +280,10 @@ const UI = (() => {
             Sprites.drawBattery(pctx, 250, 70, 12, 20);
 
             // Mini Ingrid
-            const ingrid = Sprites.getIngrid('run1', 2);
-            pctx.drawImage(ingrid, 50, 20);
+            Sprites.drawIngrid(pctx, 50, 20, 'run1');
 
             // Mini Whit chasing
-            const whit = Sprites.getWhit('chase', 2);
-            pctx.drawImage(whit, 80, 22);
+            Sprites.drawWhit(pctx, 80, 22, 'chase');
 
             // Arrow
             pctx.fillStyle = '#ffe66d';
