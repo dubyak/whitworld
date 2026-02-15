@@ -47,70 +47,131 @@ const InputSystem = (() => {
     }
 
     function setupTouchControls() {
-        // D-pad buttons
-        document.querySelectorAll('.touch-btn[data-dir]').forEach(btn => {
-            const dir = btn.dataset.dir;
+        // =========================================
+        // Virtual Joystick (Left / Right Movement)
+        // =========================================
+        const stickZone = document.getElementById('joystick-zone');
+        const stick = document.getElementById('joystick-stick');
 
-            // Touch events
-            btn.addEventListener('touchstart', (e) => {
+        if (stickZone && stick) {
+            let startX = 0, startY = 0;
+            let currentX = 0, currentY = 0;
+            let dragging = false;
+            const maxRadius = 35; // Max distance stick can move
+
+            const handleStart = (clientX, clientY) => {
+                const rect = stickZone.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                dragging = true;
+                handleMove(clientX, clientY, centerX, centerY);
+            };
+
+            const handleMove = (clientX, clientY, centerX, centerY) => {
+                if (!dragging) return;
+
+                // If centerX is not provided (e.g. touchmove), recalculate
+                if (!centerX) {
+                    const rect = stickZone.getBoundingClientRect();
+                    centerX = rect.left + rect.width / 2;
+                    centerY = rect.top + rect.height / 2;
+                }
+
+                let dx = clientX - centerX;
+                let dy = clientY - centerY;
+
+                // Cap magnitude
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance > maxRadius) {
+                    const ratio = maxRadius / distance;
+                    dx *= ratio;
+                    dy *= ratio;
+                }
+
+                // Move visual stick
+                stick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+
+                // Update input state (deadzone 10px)
+                touchState.left = dx < -10;
+                touchState.right = dx > 10;
+                touchState.up = dy < -10; // For ladders if needed
+                touchState.down = dy > 10;
+
+                // For menus, we might want justPressed, but D-pad is usually continuous
+                if (touchState.left) justPressed['left'] = true;
+                if (touchState.right) justPressed['right'] = true;
+                if (touchState.up) justPressed['up'] = true;
+                if (touchState.down) justPressed['down'] = true;
+            };
+
+            const handleEnd = () => {
+                dragging = false;
+                stick.style.transform = 'translate(-50%, -50%)';
+                touchState.left = false;
+                touchState.right = false;
+                touchState.up = false;
+                touchState.down = false;
+            };
+
+            // Touch Listeners
+            stickZone.addEventListener('touchstart', (e) => {
                 e.preventDefault();
-                touchState[dir] = true;
-                justPressed[dir] = true;
+                const touch = e.touches[0];
+                handleStart(touch.clientX, touch.clientY);
             }, { passive: false });
-            btn.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                touchState[dir] = false;
-            });
-            btn.addEventListener('touchcancel', () => {
-                touchState[dir] = false;
-            });
 
-            // Mouse events (for testing/hybrid)
-            btn.addEventListener('mousedown', (e) => {
+            stickZone.addEventListener('touchmove', (e) => {
                 e.preventDefault();
-                touchState[dir] = true;
-                justPressed[dir] = true;
-            });
-            btn.addEventListener('mouseup', (e) => {
-                e.preventDefault();
-                touchState[dir] = false;
-            });
-            btn.addEventListener('mouseleave', () => {
-                touchState[dir] = false;
-            });
-        });
+                const touch = e.touches[0];
+                handleMove(touch.clientX, touch.clientY);
+            }, { passive: false });
 
-        // Action buttons
+            stickZone.addEventListener('touchend', handleEnd);
+            stickZone.addEventListener('touchcancel', handleEnd);
+
+            // Mouse Listeners (for testing)
+            stickZone.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                handleStart(e.clientX, e.clientY);
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (dragging) {
+                    e.preventDefault();
+                    handleMove(e.clientX, e.clientY);
+                }
+            });
+            window.addEventListener('mouseup', handleEnd);
+        }
+
+        // =========================================
+        // Action Buttons (Jump / Interact)
+        // =========================================
         document.querySelectorAll('.touch-btn[data-action]').forEach(btn => {
             const action = btn.dataset.action;
 
-            // Touch events
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
+            const pressHandler = (e) => {
+                if (e.cancelable) e.preventDefault();
                 touchState[action] = true;
                 justPressed[action] = true;
-            }, { passive: false });
-            btn.addEventListener('touchend', (e) => {
-                e.preventDefault();
+                btn.classList.add('active'); // Add visual feedback class if needed
+            };
+
+            const releaseHandler = (e) => {
+                if (e.cancelable) e.preventDefault();
                 touchState[action] = false;
-            });
-            btn.addEventListener('touchcancel', () => {
-                touchState[action] = false;
-            });
+                btn.classList.remove('active');
+            };
+
+            // Touch events
+            btn.addEventListener('touchstart', pressHandler, { passive: false });
+            btn.addEventListener('touchend', releaseHandler);
+            btn.addEventListener('touchcancel', releaseHandler);
 
             // Mouse events
-            btn.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                touchState[action] = true;
-                justPressed[action] = true;
-            });
-            btn.addEventListener('mouseup', (e) => {
-                e.preventDefault();
-                touchState[action] = false;
-            });
-            btn.addEventListener('mouseleave', () => {
-                touchState[action] = false;
-            });
+            btn.addEventListener('mousedown', pressHandler);
+            btn.addEventListener('mouseup', releaseHandler);
+            btn.addEventListener('mouseleave', releaseHandler);
         });
     }
 

@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>WhitWorld — Help Your Little Bro!</title>
-    <meta name="description" content="WhitWorld: A fun pixel-art platformer where big sister Ingrid helps her little brother Whit through hilarious challenges!">
+    <meta name="description"
+        content="WhitWorld: A fun pixel-art platformer where big sister Ingrid helps her little brother Whit through hilarious challenges!">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Ambient Light Effects Layer -->
     <div id="light-overlay" class="light-overlay"></div>
@@ -51,8 +55,9 @@
                         <div class="howto-icon">⌨️</div>
                         <h3>Keyboard</h3>
                         <p><strong>Arrow Keys / WASD</strong> — Move<br>
-                        <strong>Space</strong> — Jump<br>
-                        <strong>E</strong> — Interact</p>
+                            <strong>Space</strong> — Jump<br>
+                            <strong>E</strong> — Interact
+                        </p>
                     </div>
                     <div class="howto-card">
                         <div class="howto-icon">📱</div>
@@ -62,7 +67,8 @@
                     <div class="howto-card">
                         <div class="howto-icon">🎯</div>
                         <h3>Goal</h3>
-                        <p>Help your little brother <strong>Whit</strong> through hilarious challenges before time runs out!</p>
+                        <p>Help your little brother <strong>Whit</strong> through hilarious challenges before time runs
+                            out!</p>
                     </div>
                 </div>
                 <button id="btn-howto-back" class="btn btn-secondary">BACK</button>
@@ -84,7 +90,8 @@
                         <div class="challenge-number">1</div>
                         <div class="challenge-icon">🫧</div>
                         <h3>Washing Machine Rescue</h3>
-                        <p>Whit is stuck in the washing machine! Navigate the messy basement to save him before the timer runs out!</p>
+                        <p>Whit is stuck in the washing machine! Navigate the messy basement to save him before the
+                            timer runs out!</p>
                         <div class="challenge-preview">
                             <canvas id="preview-1" width="280" height="120"></canvas>
                         </div>
@@ -94,7 +101,8 @@
                         <div class="challenge-number">2</div>
                         <div class="challenge-icon">🎸</div>
                         <h3>Battery Run</h3>
-                        <p>Whit's guitar is dead! Race to the kitchen for batteries while he chases you around the house!</p>
+                        <p>Whit's guitar is dead! Race to the kitchen for batteries while he chases you around the
+                            house!</p>
                         <div class="challenge-preview">
                             <canvas id="preview-2" width="280" height="120"></canvas>
                         </div>
@@ -169,8 +177,10 @@
                 <h2>YOU DID IT!</h2>
                 <p id="win-message" class="win-message"></p>
                 <div class="win-stats">
-                    <div class="stat"><span class="stat-label">Score</span><span id="win-score" class="stat-value">0</span></div>
-                    <div class="stat"><span class="stat-label">Time</span><span id="win-time" class="stat-value">0s</span></div>
+                    <div class="stat"><span class="stat-label">Score</span><span id="win-score"
+                            class="stat-value">0</span></div>
+                    <div class="stat"><span class="stat-label">Time</span><span id="win-time"
+                            class="stat-value">0s</span></div>
                 </div>
                 <button id="btn-win-next" class="btn btn-primary">NEXT CHALLENGE</button>
                 <button id="btn-win-menu" class="btn btn-secondary">BACK TO MENU</button>
@@ -190,17 +200,17 @@
 
         <!-- Touch Controls -->
         <div id="touch-controls" class="touch-controls hidden">
-            <div class="touch-dpad">
-                <button class="touch-btn touch-up" data-dir="up">▲</button>
-                <div class="touch-dpad-row">
-                    <button class="touch-btn touch-left" data-dir="left">◄</button>
-                    <button class="touch-btn touch-right" data-dir="right">►</button>
+            <!-- Left Side: Virtual Joystick -->
+            <div id="joystick-zone" class="joystick-zone">
+                <div id="joystick-base" class="joystick-base">
+                    <div id="joystick-stick" class="joystick-stick"></div>
                 </div>
-                <button class="touch-btn touch-down" data-dir="down">▼</button>
             </div>
+
+            <!-- Right Side: Action Buttons -->
             <div class="touch-actions">
-                <button class="touch-btn touch-jump" data-action="jump">JUMP</button>
-                <button class="touch-btn touch-interact" data-action="interact">ACT</button>
+                <button class="touch-btn touch-interact" data-action="interact">✋</button>
+                <button class="touch-btn touch-jump" data-action="jump">⏏️</button>
             </div>
         </div>
     </div>
@@ -214,4 +224,5 @@
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
