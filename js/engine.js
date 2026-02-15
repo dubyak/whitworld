@@ -452,195 +452,184 @@ const GameEngine = (() => {
         const parallax = cameraX * 0.15;
         const wallBottom = canvas.height - 60;
 
-        // Concrete wall texture
-        ctx.fillStyle = '#1e1a28';
-        ctx.fillRect(0, 0, canvas.width, wallBottom);
+        // Dark underground concrete/brick wall
+        const grad = ctx.createLinearGradient(0, 0, 0, wallBottom);
+        grad.addColorStop(0, '#1a1015'); // Dark shadow top
+        grad.addColorStop(1, '#2d2429'); // Brick color bottom
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, cameraY, canvas.width, wallBottom + 500); // Cover deep
 
-        // Wall cracks (parallax)
-        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-        ctx.lineWidth = 1;
-        for (let i = 0; i < 8; i++) {
-            const cx = ((i * 400 + 100) - parallax) % (canvas.width + 200) - 100;
-            const cy = 50 + (i * 73) % (wallBottom - 100);
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(cx + 20 + (i % 3) * 10, cy + 15);
-            ctx.lineTo(cx + 35 + (i % 2) * 20, cy + 10);
-            ctx.stroke();
+        // Brick pattern (scrolling)
+        ctx.fillStyle = 'rgba(45, 30, 35, 0.5)';
+        for (let y = -20; y < wallBottom + 200; y += 40) {
+            const offset = (y / 40) % 2 === 0 ? 0 : 40;
+            for (let x = -parallax * 0.2 % 80 + offset - 80; x < canvas.width + 80; x += 80) {
+                if (cameraY + canvas.height > y && cameraY < y + 35) { // Cull offscreen
+                    ctx.fillRect(x, y, 76, 35);
+                }
+            }
         }
 
-        // Exposed pipes along ceiling
+        // Exposed pipes along ceiling (Foreground pop)
         ctx.strokeStyle = '#3a3248';
-        ctx.lineWidth = 6;
+        ctx.lineWidth = 12;
         ctx.beginPath();
-        ctx.moveTo(0, 35);
-        ctx.lineTo(canvas.width, 35);
+        ctx.moveTo(0, 40);
+        ctx.lineTo(canvas.width, 40);
         ctx.stroke();
-        ctx.strokeStyle = '#453c55';
+
+        ctx.strokeStyle = '#4a4255'; // Highlight
         ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.moveTo(0, 36);
         ctx.lineTo(canvas.width, 36);
         ctx.stroke();
 
-        // Pipe joints
-        for (let x = 120 - (parallax * 0.5) % 300; x < canvas.width; x += 300) {
-            ctx.fillStyle = '#4a4260';
-            ctx.fillRect(x, 28, 18, 16);
+        // Vertical pipes
+        for (let i = 0; i < 5; i++) {
+            const px = ((i * 500 + 200) - parallax * 0.8) % (canvas.width + 500) - 250;
+            if (px > -50 && px < canvas.width + 50) {
+                ctx.strokeStyle = '#353040';
+                ctx.lineWidth = 8;
+                ctx.beginPath();
+                ctx.moveTo(px, 30);
+                ctx.lineTo(px, wallBottom - 50);
+                ctx.stroke();
+
+                // Joint
+                ctx.fillStyle = '#454050';
+                ctx.fillRect(px - 6, 150, 12, 20);
+            }
         }
 
-        // Vertical pipe dropping down
-        const vpx = ((600 - parallax) % canvas.width + canvas.width) % canvas.width;
-        ctx.strokeStyle = '#3a3248';
-        ctx.lineWidth = 5;
-        ctx.beginPath();
-        ctx.moveTo(vpx, 35);
-        ctx.lineTo(vpx, wallBottom * 0.6);
-        ctx.stroke();
+        // Washing machines in background (Silhouettes)
+        for (let i = 0; i < 3; i++) {
+            const wx = ((i * 800 + 400) - parallax * 0.4) % (canvas.width + 800) - 400;
+            if (wx > -100 && wx < canvas.width + 100) {
+                const wy = wallBottom - 80;
+                ctx.fillStyle = '#25202a';
+                ctx.fillRect(wx, wy, 80, 80); // Machine body
 
-        // Tiny basement window (high on wall)
-        const winX = ((250 - parallax) % (canvas.width + 200) + canvas.width + 200) % (canvas.width + 200) - 100;
-        ctx.fillStyle = '#203050';
-        ctx.fillRect(winX, 55, 70, 45);
-        // Window glass with faint moonlight
-        ctx.fillStyle = '#2a4070';
-        ctx.fillRect(winX + 4, 59, 28, 37);
-        ctx.fillRect(winX + 36, 59, 28, 37);
-        // Window frame
-        ctx.fillStyle = '#5a4838';
-        ctx.fillRect(winX, 55, 70, 4);
-        ctx.fillRect(winX, 96, 70, 4);
-        ctx.fillRect(winX + 32, 55, 4, 45);
+                ctx.fillStyle = '#1a1520';
+                ctx.beginPath();
+                ctx.arc(wx + 40, wy + 40, 30, 0, Math.PI * 2); // Door
+                ctx.fill();
 
-        // Water heater in far background
-        const whx = ((1200 - parallax) % (canvas.width + 400) + canvas.width + 400) % (canvas.width + 400) - 200;
-        ctx.fillStyle = '#2a2538';
-        ctx.fillRect(whx, wallBottom - 140, 50, 140);
-        ctx.fillStyle = '#333045';
-        ctx.fillRect(whx + 5, wallBottom - 135, 40, 130);
-        // Heater dial
-        ctx.fillStyle = '#ef4444';
-        ctx.beginPath();
-        ctx.arc(whx + 25, wallBottom - 70, 4, 0, Math.PI * 2);
-        ctx.fill();
+                ctx.fillStyle = '#304050';
+                ctx.beginPath();
+                ctx.arc(wx + 40, wy + 40, 24, 0, Math.PI * 2); // Glass
+                ctx.fill();
+            }
+        }
 
-        // Dust particles floating
+        // Small high windows showing "sidewalk level"
+        const winX = ((300 - parallax * 0.1) % (canvas.width + 400) + canvas.width + 400) % (canvas.width + 400) - 200;
+        if (winX > -100 && winX < canvas.width + 100) {
+            ctx.fillStyle = '#101015'; // Frame
+            ctx.fillRect(winX, 20, 100, 40);
+
+            // Street light pouring in
+            const gradient = ctx.createLinearGradient(winX, 20, winX, 80);
+            gradient.addColorStop(0, '#506080'); // Blueish street light
+            gradient.addColorStop(1, 'rgba(80, 96, 128, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(winX + 5, 25, 90, 80); // Light beam
+
+            // Bars on window
+            ctx.fillStyle = '#000';
+            ctx.fillRect(winX + 30, 20, 4, 40);
+            ctx.fillRect(winX + 66, 20, 4, 40);
+        }
+
+        // Floating dust
         for (const star of bgStars) {
             star.twinkle += 1;
-            const alpha = 0.15 + Math.sin(star.twinkle / 80) * 0.15;
-            ctx.fillStyle = `rgba(200, 190, 180, ${alpha})`;
-            const sx = ((star.x - cameraX * 0.2) % canvas.width + canvas.width) % canvas.width;
+            const alpha = 0.1 + Math.sin(star.twinkle / 80) * 0.1;
+            ctx.fillStyle = `rgba(200, 200, 190, ${alpha})`;
+            const sx = ((star.x - cameraX * 0.3) % canvas.width + canvas.width) % canvas.width;
             ctx.fillRect(sx, star.y, star.size, star.size);
-        }
-
-        // Brick pattern near floor
-        ctx.fillStyle = 'rgba(80, 60, 50, 0.15)';
-        for (let row = 0; row < 3; row++) {
-            const by = wallBottom - 20 - row * 16;
-            const offset = row % 2 === 0 ? 0 : 25;
-            for (let bx = -parallax * 0.3 % 50 + offset - 50; bx < canvas.width + 50; bx += 50) {
-                ctx.fillRect(bx, by, 48, 14);
-                ctx.strokeStyle = 'rgba(30, 20, 15, 0.2)';
-                ctx.lineWidth = 1;
-                ctx.strokeRect(bx, by, 48, 14);
-            }
         }
     }
 
     function drawHouseBG(time) {
         const parallax = cameraX * 0.15;
-        const wallBottom = canvas.height - 60;
+        // Use camera movement to determine "floors"
+        // Upstairs is at y=0 (relative), Downstairs is at y=200+
 
-        // Wallpaper base
-        ctx.fillStyle = '#1c2035';
-        ctx.fillRect(0, 0, canvas.width, wallBottom);
+        const upstairsColor = '#2d2640'; // Deep purple/blue row house interior
+        const downstairsColor = '#3a3028'; // Warm brownish kitchen/basement mix
 
-        // Wallpaper subtle stripe pattern
-        ctx.fillStyle = 'rgba(255,255,255,0.015)';
-        for (let x = -parallax * 0.2 % 30; x < canvas.width; x += 30) {
-            ctx.fillRect(x, 0, 12, wallBottom);
-        }
+        // Background fil based on depth
+        const grad = ctx.createLinearGradient(0, cameraY - 100, 0, cameraY + canvas.height + 100);
+        grad.addColorStop(0, upstairsColor);
+        grad.addColorStop(0.6, upstairsColor);
+        grad.addColorStop(0.65, downstairsColor);
+        grad.addColorStop(1, downstairsColor);
 
-        // Baseboards along bottom of wall
-        ctx.fillStyle = '#2a2540';
-        ctx.fillRect(0, wallBottom - 15, canvas.width, 15);
-        ctx.fillStyle = '#352f48';
-        ctx.fillRect(0, wallBottom - 15, canvas.width, 3);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, cameraY, canvas.width, canvas.height); // Correct fill
 
-        // Crown molding at top
-        ctx.fillStyle = '#2a2540';
-        ctx.fillRect(0, 0, canvas.width, 8);
-        ctx.fillStyle = '#352f48';
-        ctx.fillRect(0, 6, canvas.width, 2);
+        // UPSTAIRS DECOR (Row House Windows)
+        if (cameraY < 400) {
+            // Draw row house windows looking out to street
+            for (let i = 0; i < 3; i++) {
+                const wx = ((i * 600 + 100) - parallax * 0.5) % (canvas.width + 600) - 300;
+                if (wx > -150 && wx < canvas.width + 150) {
+                    const wy = 50;
+                    // Outside view (Brick building across street)
+                    ctx.fillStyle = '#1a1520'; // Night sky/street
+                    ctx.fillRect(wx, wy, 120, 180);
 
-        // Windows with curtains
-        for (let i = 0; i < 2; i++) {
-            const wx = ((350 + i * 800 - parallax) % (canvas.width + 600) + canvas.width + 600) % (canvas.width + 600) - 300;
-            if (wx > -120 && wx < canvas.width + 120) {
-                // Window frame
-                ctx.fillStyle = '#3a3555';
-                ctx.fillRect(wx, 40, 100, 80);
-                // Glass (slightly lit)
-                ctx.fillStyle = '#1e3050';
-                ctx.fillRect(wx + 6, 46, 40, 68);
-                ctx.fillRect(wx + 52, 46, 40, 68);
-                // Curtains
-                ctx.fillStyle = '#4a2040';
-                ctx.fillRect(wx - 8, 38, 20, 85);
-                ctx.fillRect(wx + 88, 38, 20, 85);
-                // Curtain drape lines
-                ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(wx + 2, 40);
-                ctx.quadraticCurveTo(wx - 5, 80, wx + 2, 120);
-                ctx.stroke();
-                // Window sill
-                ctx.fillStyle = '#4a4260';
-                ctx.fillRect(wx - 5, 118, 112, 6);
+                    // Building opposite
+                    ctx.fillStyle = '#2a1a1a'; // Dark red brick
+                    ctx.fillRect(wx + 10, wy + 20, 100, 160);
+                    // Windows opposite
+                    ctx.fillStyle = '#403010'; // Dim yellow light
+                    ctx.fillRect(wx + 20, wy + 40, 20, 30);
+                    ctx.fillRect(wx + 70, wy + 40, 20, 30);
+                    ctx.fillRect(wx + 20, wy + 100, 20, 30);
+
+                    // Window Frame (Interior)
+                    ctx.fillStyle = '#4a3b30'; // Wood trim
+                    ctx.fillRect(wx - 10, wy - 10, 140, 10); // Top
+                    ctx.fillRect(wx - 10, wy + 180, 140, 10); // Sill
+                    ctx.fillRect(wx - 10, wy - 10, 10, 200); // Left
+                    ctx.fillRect(wx + 120, wy - 10, 10, 200); // Right
+
+                    // Sash
+                    ctx.fillStyle = '#3a2b20';
+                    ctx.fillRect(wx, wy + 85, 120, 10);
+                }
             }
         }
 
-        // Family photos on wall (parallax)
-        for (let i = 0; i < 3; i++) {
-            const fx = ((150 + i * 550 - parallax * 0.8) % (canvas.width + 400) + canvas.width + 400) % (canvas.width + 400) - 200;
-            if (fx > -50 && fx < canvas.width + 50) {
-                // Frame
-                ctx.fillStyle = '#5a4838';
-                ctx.fillRect(fx, 60 + (i % 2) * 20, 36, 30);
-                // Photo inside
-                const colors = ['#3a5070', '#504060', '#405048'];
-                ctx.fillStyle = colors[i];
-                ctx.fillRect(fx + 3, 63 + (i % 2) * 20, 30, 24);
-                // Stick figures in photos
-                ctx.fillStyle = 'rgba(255,255,255,0.15)';
-                ctx.fillRect(fx + 12, 68 + (i % 2) * 20, 4, 8);
-                ctx.fillRect(fx + 20, 70 + (i % 2) * 20, 3, 6);
+        // DOWNSTAIRS DECOR (Kitchen / Living)
+        if (cameraY > 200) {
+            // Checkered tile pattern hint or wainscoting
+            const floorY = canvas.height + 300; // Deep down
+            // Just draw some kitchen cabinets in background
+            for (let i = 0; i < 4; i++) {
+                const cx = ((i * 500 + 100) - parallax * 0.6) % (canvas.width + 600) - 300;
+                // Cabinet
+                const cy = 600; // Relative Y
+                // Since this is background, we draw relative to camera or fixed?
+                // Background should scroll with camera Y but slower? 
+                // Currently context is translated by -cameraY.
+                // So drawing at fixed Y draws at world Y.
+                // Downstairs is at Y ~ 400+.
+
+                if (cx > -100 && cx < canvas.width + 100) {
+                    ctx.fillStyle = '#3e3430';
+                    ctx.fillRect(cx, 550, 120, 60); // Upper cabinet
+                    ctx.fillStyle = '#302824';
+                    ctx.fillRect(cx + 5, 555, 50, 50); // Door L
+                    ctx.fillRect(cx + 65, 555, 50, 50); // Door R
+                    // Knobs
+                    ctx.fillStyle = '#a0855c';
+                    ctx.beginPath(); ctx.arc(cx + 45, 595, 3, 0, Math.PI * 2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(cx + 75, 595, 3, 0, Math.PI * 2); ctx.fill();
+                }
             }
-        }
-
-        // Light fixture
-        const lx = ((500 - parallax * 0.5) % (canvas.width + 200) + canvas.width + 200) % (canvas.width + 200) - 100;
-        ctx.strokeStyle = '#3a3248';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(lx, 0);
-        ctx.lineTo(lx, 25);
-        ctx.stroke();
-        ctx.fillStyle = '#ffe66d';
-        ctx.globalAlpha = 0.06 + Math.sin(time * 3) * 0.02;
-        ctx.beginPath();
-        ctx.arc(lx, 30, 15, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-
-        // Floating dust (background particles)
-        for (const star of bgStars) {
-            star.twinkle += 1;
-            const alpha = 0.12 + Math.sin(star.twinkle / 60) * 0.1;
-            ctx.fillStyle = `rgba(220, 210, 200, ${alpha})`;
-            const sx = ((star.x - cameraX * 0.2) % canvas.width + canvas.width) % canvas.width;
-            ctx.fillRect(sx, star.y, star.size, star.size);
         }
     }
 

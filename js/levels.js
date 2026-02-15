@@ -399,17 +399,17 @@ const Levels = (() => {
         );
         guitar.interacted = true; // Can't interact, just visual
 
-        // Whit chasing — starts far behind the player (off-screen left)
-        const whit = new WhitNPC(-400, groundY - 50, 'chasing');
+        // Whit chasing — starts closer to player (just off-screen left)
+        const whit = new WhitNPC(-100, groundY - 50, 'chasing');
         whit.chaseSpeed = s.whitSpeed;
         whit.maxCatches = s.maxCatches;
-        // Longer delay on easy difficulty
+        // Faster start
         if (difficulty === 'easy') {
-            whit.chaseDelay = 8000;
-        } else if (difficulty === 'normal') {
-            whit.chaseDelay = 5000;
-        } else {
             whit.chaseDelay = 3000;
+        } else if (difficulty === 'normal') {
+            whit.chaseDelay = 2000;
+        } else {
+            whit.chaseDelay = 1000;
         }
         whit.say("I WANT MY GUITAR! 😡");
 
