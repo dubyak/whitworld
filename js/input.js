@@ -36,19 +36,22 @@ const InputSystem = (() => {
             keys[e.code] = false;
         });
 
-        // Touch controls
-        if (isMobile) {
-            setupTouchControls();
+        // Setup touch controls (attach listeners regardless of device type)
+        // This ensures if they are ever shown, they work.
+        setupTouchControls();
+
+        // Initial visibility check
+        if (!isMobile) {
+            hideTouchControls();
         }
     }
 
     function setupTouchControls() {
-        const touchEl = document.getElementById('touch-controls');
-        if (touchEl) touchEl.classList.remove('hidden');
-
         // D-pad buttons
         document.querySelectorAll('.touch-btn[data-dir]').forEach(btn => {
             const dir = btn.dataset.dir;
+
+            // Touch events
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 touchState[dir] = true;
@@ -60,11 +63,26 @@ const InputSystem = (() => {
             btn.addEventListener('touchcancel', () => {
                 touchState[dir] = false;
             });
+
+            // Mouse events (for testing/hybrid)
+            btn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                touchState[dir] = true;
+            });
+            btn.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                touchState[dir] = false;
+            });
+            btn.addEventListener('mouseleave', () => {
+                touchState[dir] = false;
+            });
         });
 
         // Action buttons
         document.querySelectorAll('.touch-btn[data-action]').forEach(btn => {
             const action = btn.dataset.action;
+
+            // Touch events
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 touchState[action] = true;
@@ -74,6 +92,19 @@ const InputSystem = (() => {
                 touchState[action] = false;
             });
             btn.addEventListener('touchcancel', () => {
+                touchState[action] = false;
+            });
+
+            // Mouse events
+            btn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                touchState[action] = true;
+            });
+            btn.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                touchState[action] = false;
+            });
+            btn.addEventListener('mouseleave', () => {
                 touchState[action] = false;
             });
         });
