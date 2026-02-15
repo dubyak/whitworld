@@ -159,6 +159,10 @@ const Sprites = (() => {
         ctx.arc(0, bodyY + bodyH * 0.5, bodyW * 0.25, 0, Math.PI * 2);
         ctx.fill();
 
+        // --- HEAD CALCS ---
+        const headSz = w * 0.65; // Big head
+        const headY = bodyY - headSz * 0.5 + 4; // Lowered: Overlap body slightly
+
         // --- ARMS ---
         const armW = w * 0.14;
         const armH = h * 0.28;
@@ -197,38 +201,13 @@ const Sprites = (() => {
         ctx.fill();
         ctx.restore();
 
-        // --- HEAD ---
-        const headSz = w * 0.65; // Big head
-        const headY = bodyY - headSz * 0.5 + 4; // Lowered: Overlap body slightly
-
-        // Neck (tiny)
-        ctx.fillStyle = isIngrid ? PAL.ingrid_skin : PAL.whit_skin;
-        ctx.fillRect(-w * 0.1, bodyY - 2, w * 0.2, 5);
-
-        // Face shape
-        ctx.beginPath();
-        ctx.arc(0, headY, headSz / 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Face Shadow (chin)
-        ctx.fillStyle = isIngrid ? PAL.ingrid_skin_shadow : PAL.whit_skin_shadow;
-        ctx.beginPath();
-        ctx.arc(0, headY, headSz / 2, 0.5, Math.PI - 0.5);
-        ctx.fill();
-
-        // --- HAIR ---
+        // --- BACK HAIR ---
         ctx.fillStyle = isIngrid ? PAL.ingrid_hair : PAL.whit_hair;
         ctx.beginPath();
-        // Hair cap
+        // Hair cap (behind face)
         ctx.arc(0, headY - 2, headSz / 2 + 2, Math.PI, 0); // Top half
         ctx.lineTo(headSz / 2 + 2, headY + 10);
         ctx.lineTo(-headSz / 2 - 2, headY + 10);
-        ctx.fill();
-
-        // Bangs
-        ctx.beginPath();
-        ctx.arc(-headSz / 4, headY - headSz / 4, headSz / 4, 0, Math.PI * 2);
-        ctx.arc(headSz / 4, headY - headSz / 4, headSz / 4, 0, Math.PI * 2);
         ctx.fill();
 
         if (isIngrid) {
@@ -248,6 +227,31 @@ const Sprites = (() => {
             ctx.fill();
             ctx.restore();
         }
+
+        // --- HEAD ---
+        // definitions moved up
+
+        // Neck (tiny)
+        ctx.fillStyle = isIngrid ? PAL.ingrid_skin : PAL.whit_skin;
+        ctx.fillRect(-w * 0.1, bodyY - 2, w * 0.2, 5);
+
+        // Face shape
+        ctx.beginPath();
+        ctx.arc(0, headY, headSz / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Face Shadow (chin)
+        ctx.fillStyle = isIngrid ? PAL.ingrid_skin_shadow : PAL.whit_skin_shadow;
+        ctx.beginPath();
+        ctx.arc(0, headY, headSz / 2, 0.5, Math.PI - 0.5);
+        ctx.fill();
+
+        // --- FRONT HAIR (Bangs) ---
+        ctx.fillStyle = isIngrid ? PAL.ingrid_hair : PAL.whit_hair;
+        ctx.beginPath();
+        ctx.arc(-headSz / 4, headY - headSz / 4, headSz / 4, 0, Math.PI * 2);
+        ctx.arc(headSz / 4, headY - headSz / 4, headSz / 4, 0, Math.PI * 2);
+        ctx.fill();
 
         // --- FACE FEATURES ---
         // Eyes
