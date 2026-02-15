@@ -9,8 +9,8 @@ const Sprites = (() => {
     // Color palettes
     const PAL = {
         // Ingrid (big sister - 8yo girl)
-        ingrid_hair: '#4a2c17',      // dark brown hair
-        ingrid_hair_hi: '#6b3f22',   // hair highlight
+        ingrid_hair: '#f5d442',      // blonde hair (was dark brown)
+        ingrid_hair_hi: '#ffe066',   // hair highlight
         ingrid_skin: '#fdbcb4',      // skin
         ingrid_skin_shadow: '#e8a090',
         ingrid_shirt: '#ff6b9d',     // pink shirt
@@ -79,8 +79,8 @@ const Sprites = (() => {
     const INGRID_STAND = [
         '....hhhh....',
         '...hhhhhh...',
-        '..hHhhhHhh..',
-        '..hhhhhhhh..',
+        'hh.HhhhHhh..', // Ponytail added
+        'hhhhhhhhhh..',
         '..sssssss...',
         '..sesSseS...',
         '..ssssssss..',
@@ -102,8 +102,8 @@ const Sprites = (() => {
     const INGRID_RUN1 = [
         '....hhhh....',
         '...hhhhhh...',
-        '..hHhhhHhh..',
-        '..hhhhhhhh..',
+        'hh.HhhhHhh..', // Ponytail
+        'hhhhhhhhhh..',
         '..sssssss...',
         '..sesSseS...',
         '..ssssssss..',
@@ -123,11 +123,11 @@ const Sprites = (() => {
     ];
 
     const INGRID_RUN2 = [
-        '....hhhh....',
+        '....hhhh....', // Ponytail bounces
         '...hhhhhh...',
-        '..hHhhhHhh..',
-        '..hhhhhhhh..',
-        '..ssssssss..',
+        '.hHHhhhHhh..',
+        'hhhhhhhhhh..', // Ponytail
+        'hhhhhhhhss..',
         '..sesSseS...',
         '..ssssssss..',
         '...ssMss....',
@@ -146,10 +146,10 @@ const Sprites = (() => {
     ];
 
     const INGRID_JUMP = [
-        '....hhhh....',
-        '...hhhhhh...',
-        '..hHhhhHhh..',
-        '..hhhhhhhh..',
+        '....hhhh....', // Ponytail flies up
+        '..hhhhhhh...',
+        'hh.HhhhHhh..',
+        'hh.hhhhhhh..',
         '..ssssssss..',
         '..sesSseS...',
         '..ssssssss..',
