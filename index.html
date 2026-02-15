@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>WhitWorld — Help Your Little Bro!</title>
+    <meta name="description" content="WhitWorld: A fun pixel-art platformer where big sister Ingrid helps her little brother Whit through hilarious challenges!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Ambient Light Effects Layer -->
+    <div id="light-overlay" class="light-overlay"></div>
+
+    <!-- Main Game Container -->
+    <div id="game-container">
+        <!-- Game Canvas -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Title Screen -->
+        <div id="title-screen" class="screen active">
+            <div class="title-lights">
+                <div class="light-bar light-bar-1"></div>
+                <div class="light-bar light-bar-2"></div>
+                <div class="light-bar light-bar-3"></div>
+                <div class="light-bar light-bar-4"></div>
+            </div>
+            <div class="title-content">
+                <h1 class="game-title">
+                    <span class="title-whit">WHIT</span><span class="title-world">WORLD</span>
+                </h1>
+                <p class="title-subtitle">Help Your Little Bro!</p>
+                <div class="title-characters">
+                    <canvas id="title-ingrid" width="64" height="64"></canvas>
+                    <span class="title-heart">❤️</span>
+                    <canvas id="title-whit" width="48" height="48"></canvas>
+                </div>
+                <button id="btn-start" class="btn btn-primary pulse-btn">START GAME</button>
+                <button id="btn-how-to-play" class="btn btn-secondary">HOW TO PLAY</button>
+            </div>
+        </div>
+
+        <!-- How to Play Screen -->
+        <div id="howto-screen" class="screen">
+            <div class="screen-content">
+                <h2>How To Play</h2>
+                <div class="howto-grid">
+                    <div class="howto-card">
+                        <div class="howto-icon">⌨️</div>
+                        <h3>Keyboard</h3>
+                        <p><strong>Arrow Keys / WASD</strong> — Move<br>
+                        <strong>Space</strong> — Jump<br>
+                        <strong>E</strong> — Interact</p>
+                    </div>
+                    <div class="howto-card">
+                        <div class="howto-icon">📱</div>
+                        <h3>Touch</h3>
+                        <p>Use the <strong>on-screen D-pad</strong> and <strong>action buttons</strong></p>
+                    </div>
+                    <div class="howto-card">
+                        <div class="howto-icon">🎯</div>
+                        <h3>Goal</h3>
+                        <p>Help your little brother <strong>Whit</strong> through hilarious challenges before time runs out!</p>
+                    </div>
+                </div>
+                <button id="btn-howto-back" class="btn btn-secondary">BACK</button>
+            </div>
+        </div>
+
+        <!-- Challenge Select Screen -->
+        <div id="select-screen" class="screen">
+            <div class="screen-content">
+                <h2>Choose a Challenge</h2>
+                <div class="difficulty-toggle">
+                    <span>Difficulty:</span>
+                    <button id="diff-easy" class="diff-btn active" data-diff="easy">😊 Easy</button>
+                    <button id="diff-normal" class="diff-btn" data-diff="normal">😎 Normal</button>
+                    <button id="diff-hard" class="diff-btn" data-diff="hard">🔥 Hard</button>
+                </div>
+                <div class="challenge-grid">
+                    <div class="challenge-card" data-challenge="1">
+                        <div class="challenge-number">1</div>
+                        <div class="challenge-icon">🫧</div>
+                        <h3>Washing Machine Rescue</h3>
+                        <p>Whit is stuck in the washing machine! Navigate the messy basement to save him before the timer runs out!</p>
+                        <div class="challenge-preview">
+                            <canvas id="preview-1" width="280" height="120"></canvas>
+                        </div>
+                        <button class="btn btn-primary btn-play" data-challenge="1">PLAY</button>
+                    </div>
+                    <div class="challenge-card" data-challenge="2">
+                        <div class="challenge-number">2</div>
+                        <div class="challenge-icon">🎸</div>
+                        <h3>Battery Run</h3>
+                        <p>Whit's guitar is dead! Race to the kitchen for batteries while he chases you around the house!</p>
+                        <div class="challenge-preview">
+                            <canvas id="preview-2" width="280" height="120"></canvas>
+                        </div>
+                        <button class="btn btn-primary btn-play" data-challenge="2">PLAY</button>
+                    </div>
+                    <div class="challenge-card challenge-locked">
+                        <div class="challenge-number">?</div>
+                        <div class="challenge-icon">🔒</div>
+                        <h3>Coming Soon!</h3>
+                        <p>More challenges are on the way...</p>
+                    </div>
+                </div>
+                <button id="btn-select-back" class="btn btn-secondary">BACK TO TITLE</button>
+            </div>
+        </div>
+
+        <!-- Music Selector -->
+        <div id="music-panel" class="music-panel">
+            <button id="btn-music-toggle" class="music-toggle" title="Music Settings">🎵</button>
+            <div id="music-dropdown" class="music-dropdown hidden">
+                <h4>🎶 Soundtrack</h4>
+                <div class="music-options">
+                    <button class="music-btn active" data-track="adventure">🏔️ Adventure</button>
+                    <button class="music-btn" data-track="chill">🌊 Chill</button>
+                    <button class="music-btn" data-track="retro">👾 Retro</button>
+                    <button class="music-btn" data-track="funky">🕺 Funky</button>
+                </div>
+                <div class="volume-control">
+                    <span>🔊</span>
+                    <input type="range" id="volume-slider" min="0" max="100" value="50">
+                </div>
+            </div>
+        </div>
+
+        <!-- HUD (in-game) -->
+        <div id="game-hud" class="hud hidden">
+            <div class="hud-left">
+                <div class="hud-item hud-lives">
+                    <span id="hud-lives-label">❤️❤️❤️</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">SCORE</span>
+                    <span id="hud-score">0</span>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div id="hud-challenge-name" class="hud-challenge-name"></div>
+            </div>
+            <div class="hud-right">
+                <div class="hud-item" id="hud-timer-container">
+                    <span class="hud-label">TIME</span>
+                    <span id="hud-timer">60</span>
+                </div>
+                <button id="btn-pause" class="btn-icon" title="Pause">⏸️</button>
+            </div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div id="pause-overlay" class="overlay hidden">
+            <div class="overlay-content">
+                <h2>PAUSED</h2>
+                <button id="btn-resume" class="btn btn-primary">RESUME</button>
+                <button id="btn-restart" class="btn btn-secondary">RESTART</button>
+                <button id="btn-quit" class="btn btn-secondary">QUIT TO MENU</button>
+            </div>
+        </div>
+
+        <!-- Win Overlay -->
+        <div id="win-overlay" class="overlay hidden">
+            <div class="overlay-content win-content">
+                <div class="win-stars">⭐⭐⭐</div>
+                <h2>YOU DID IT!</h2>
+                <p id="win-message" class="win-message"></p>
+                <div class="win-stats">
+                    <div class="stat"><span class="stat-label">Score</span><span id="win-score" class="stat-value">0</span></div>
+                    <div class="stat"><span class="stat-label">Time</span><span id="win-time" class="stat-value">0s</span></div>
+                </div>
+                <button id="btn-win-next" class="btn btn-primary">NEXT CHALLENGE</button>
+                <button id="btn-win-menu" class="btn btn-secondary">BACK TO MENU</button>
+            </div>
+        </div>
+
+        <!-- Lose Overlay -->
+        <div id="lose-overlay" class="overlay hidden">
+            <div class="overlay-content lose-content">
+                <h2>OH NO!</h2>
+                <p id="lose-message" class="lose-message"></p>
+                <canvas id="lose-animation" width="200" height="150"></canvas>
+                <button id="btn-lose-retry" class="btn btn-primary">TRY AGAIN</button>
+                <button id="btn-lose-menu" class="btn btn-secondary">BACK TO MENU</button>
+            </div>
+        </div>
+
+        <!-- Touch Controls -->
+        <div id="touch-controls" class="touch-controls hidden">
+            <div class="touch-dpad">
+                <button class="touch-btn touch-up" data-dir="up">▲</button>
+                <div class="touch-dpad-row">
+                    <button class="touch-btn touch-left" data-dir="left">◄</button>
+                    <button class="touch-btn touch-right" data-dir="right">►</button>
+                </div>
+                <button class="touch-btn touch-down" data-dir="down">▼</button>
+            </div>
+            <div class="touch-actions">
+                <button class="touch-btn touch-jump" data-action="jump">JUMP</button>
+                <button class="touch-btn touch-interact" data-action="interact">ACT</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/audio.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/sprites.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

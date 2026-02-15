@@ -1,0 +1,12 @@
+{
+  "name": "whitworld",
+  "version": "1.0.0",
+  "description": "WhitWorld — A pixel-art platformer where big sister Ingrid helps her little brother Whit through hilarious challenges!",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve . -p 3000 -s",
+    "start": "npx -y serve . -p 3000 -s"
+  },
+  "keywords": ["game", "platformer", "pixel-art"],
+  "license": "MIT"
+}
