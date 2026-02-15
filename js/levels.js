@@ -270,7 +270,8 @@ const Levels = (() => {
         // Level layout: Upstairs rooms → Stairs → Long downstairs hallway/kitchen
         const platforms = [
             // ===== UPSTAIRS (0-3200) =====
-            new Platform(0, groundY, 3200, 60, 'ground'),
+            // Extend ground to negative for Whit spawn
+            new Platform(-500, groundY, 3700, 60, 'ground'),
             // Bedroom furniture
             new Platform(150, groundY - 95, 130, 15, 'shelf'),
             new Platform(400, groundY - 105, 120, 15, 'shelf'),
