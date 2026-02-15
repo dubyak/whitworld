@@ -157,16 +157,19 @@ class Player extends Entity {
             return; // Flash effect
         }
 
-        const sprite = Sprites.getIngrid(this.state, 3);
-        const drawX = this.x - cameraX;
+        // Center sprite horizontally on hitbox, align bottom
+        // Hitbox: 36x60, Sprite: 48x64
+        const drawX = this.x - cameraX - 6;
+        const drawY = this.y - 4;
 
         ctx.save();
         if (this.facing === -1) {
-            ctx.translate(drawX + this.w, 0);
+            // Flip around center of sprite
+            ctx.translate(drawX + 48, 0); // 48 is sprite width
             ctx.scale(-1, 1);
-            ctx.drawImage(sprite, 0, this.y);
+            Sprites.drawIngrid(ctx, 0, drawY, this.state);
         } else {
-            ctx.drawImage(sprite, drawX, this.y);
+            Sprites.drawIngrid(ctx, drawX, drawY, this.state);
         }
         ctx.restore();
 
@@ -271,11 +274,26 @@ class WhitNPC extends Entity {
             if (player && !this.isPaused) {
                 const dx = player.x - this.x;
                 const dir = dx > 0 ? 1 : -1;
-                // Slow down when further away, speed up when close
+
+                // Rubber banding: Speed up when far away to catch up!
                 const dist = Math.abs(dx);
-                const speedMult = dist < 150 ? 1.0 : 0.75;
+                let speedMult = 1.0;
+
+                if (dist > 800) {
+                    speedMult = 2.5; // Very fast catchup
+                } else if (dist > 400) {
+                    speedMult = 1.8; // Fast catchup
+                } else if (dist < 100) {
+                    speedMult = 0.8; // Slow down slightly when very close (give player a chance)
+                }
+
                 this.vx = this.chaseSpeed * dir * speedMult;
                 this.x += this.vx;
+
+                // Debug log every 60 frames
+                if (Math.floor(this.animTimer) % 60 === 0) {
+                    console.log(`Whit Chasing: dist=${Math.floor(dist)}, speed=${this.vx.toFixed(1)}`);
+                }
             } else {
                 this.vx *= 0.8; // Friction when paused
             }
@@ -321,17 +339,19 @@ class WhitNPC extends Entity {
     }
 
     draw(ctx, cameraX) {
-        const sprite = Sprites.getWhit(this.state, 3);
-        const drawX = this.x - cameraX;
+        // Hitbox: 30x48, Sprite: 40x54
+        // Offset X: -5, Offset Y: -6
+        const drawX = this.x - cameraX - 5;
+        const drawY = this.y - 6;
 
         // Draw Whit
         ctx.save();
         if (this.behavior === 'chasing' && this.vx < 0) {
-            ctx.translate(drawX + this.w, 0);
+            ctx.translate(drawX + 40, 0); // 40 is sprite width
             ctx.scale(-1, 1);
-            ctx.drawImage(sprite, 0, this.y);
+            Sprites.drawWhit(ctx, 0, drawY, this.state);
         } else {
-            ctx.drawImage(sprite, drawX, this.y);
+            Sprites.drawWhit(ctx, drawX, drawY, this.state);
         }
         ctx.restore();
 
@@ -448,36 +468,50 @@ class Platform extends Entity {
             case 'ground':
                 ctx.fillStyle = Sprites.PAL.floor;
                 ctx.fillRect(dx, this.y, this.w, this.h);
-                // Top edge
+                // Top edge details
                 ctx.fillStyle = '#5a4838';
-                ctx.fillRect(dx, this.y, this.w, 3);
+                ctx.fillRect(dx, this.y, this.w, 4);
                 break;
             case 'shelf':
+                // Wood texture
                 ctx.fillStyle = '#8B7355';
-                ctx.fillRect(dx, this.y, this.w, this.h);
-                ctx.fillStyle = '#6B5335';
-                ctx.fillRect(dx, this.y + this.h - 3, this.w, 3);
+                ctx.beginPath();
+                ctx.roundRect(dx, this.y, this.w, this.h, 4);
+                ctx.fill();
+                // Top Shine
                 ctx.fillStyle = 'rgba(255,255,255,0.1)';
-                ctx.fillRect(dx, this.y, this.w, 2);
+                ctx.fillRect(dx + 2, this.y, this.w - 4, 3);
+                // Shadow underneath
+                ctx.fillStyle = 'rgba(0,0,0,0.2)';
+                ctx.fillRect(dx + 4, this.y + this.h - 4, this.w - 8, 4);
                 break;
             case 'stairs':
                 ctx.fillStyle = '#7c6c5c';
                 ctx.fillRect(dx, this.y, this.w, this.h);
-                ctx.fillStyle = '#6b5b4f';
-                ctx.fillRect(dx, this.y, this.w, 2);
+                // Carpet runner?
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(dx + this.w * 0.1, this.y, this.w * 0.8, this.h);
+                // Nosing
+                ctx.fillStyle = '#5a4838';
+                ctx.fillRect(dx, this.y, this.w, 4);
                 break;
             case 'counter':
-                ctx.fillStyle = '#a0855c';
-                ctx.fillRect(dx, this.y, this.w, this.h);
-                ctx.fillStyle = '#876f4c';
-                ctx.fillRect(dx, this.y + 4, this.w, this.h - 4);
-                // Counter top highlight
-                ctx.fillStyle = 'rgba(255,255,255,0.15)';
-                ctx.fillRect(dx, this.y, this.w, 3);
+                ctx.fillStyle = '#f3f4f6'; // Marble top
+                ctx.beginPath();
+                ctx.roundRect(dx, this.y, this.w, this.h, 2);
+                ctx.fill();
+                // Edge
+                ctx.fillStyle = '#d1d5db';
+                ctx.fillRect(dx, this.y + 6, this.w, this.h - 6);
+                // Cabinet below
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(dx + 2, this.y + 8, this.w - 4, this.h - 10);
                 break;
             default:
                 ctx.fillStyle = '#666';
-                ctx.fillRect(dx, this.y, this.w, this.h);
+                ctx.beginPath();
+                ctx.roundRect(dx, this.y, this.w, this.h, 4);
+                ctx.fill();
         }
     }
 }
@@ -516,14 +550,30 @@ class Collectible extends Entity {
                 Sprites.drawBattery(ctx, dx, bobY, this.w, this.h);
                 break;
             case 'star':
+                // Vector Star
                 ctx.fillStyle = '#ffe66d';
-                ctx.font = `${this.w}px sans-serif`;
-                ctx.fillText('⭐', dx, bobY + this.h);
+                ctx.translate(dx + this.w / 2, bobY + this.h / 2);
+                ctx.beginPath();
+                for (let i = 0; i < 5; i++) {
+                    ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * this.w / 2,
+                        -Math.sin((18 + i * 72) * Math.PI / 180) * this.w / 2);
+                    ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * this.w / 4,
+                        -Math.sin((54 + i * 72) * Math.PI / 180) * this.w / 4);
+                }
+                ctx.fill();
+                ctx.translate(-(dx + this.w / 2), -(bobY + this.h / 2));
                 break;
             case 'heart':
+                // Vector Heart
                 ctx.fillStyle = '#ef4444';
-                ctx.font = `${this.w}px sans-serif`;
-                ctx.fillText('❤️', dx, bobY + this.h);
+                const hx = dx + this.w / 2;
+                const hy = bobY + this.h / 2;
+                const s = this.w / 2;
+                ctx.beginPath();
+                ctx.moveTo(hx, hy + s * 0.7);
+                ctx.bezierCurveTo(hx + s, hy + s * 0.3, hx + s, hy - s * 0.5, hx, hy - s * 0.2);
+                ctx.bezierCurveTo(hx - s, hy - s * 0.5, hx - s, hy + s * 0.3, hx, hy + s * 0.7);
+                ctx.fill();
                 break;
         }
     }

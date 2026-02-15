@@ -377,7 +377,9 @@ const GameEngine = (() => {
         for (const p of particles) {
             ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
             ctx.fillStyle = p.color;
-            ctx.fillRect(p.x - cameraX, p.y, p.size, p.size);
+            ctx.beginPath();
+            ctx.arc(p.x - cameraX, p.y, p.size / 2, 0, Math.PI * 2);
+            ctx.fill();
         }
         ctx.globalAlpha = 1;
 
@@ -745,8 +747,11 @@ const GameEngine = (() => {
         loseCtx.fillRect(0, 0, 200, 150);
 
         // Draw Whit crying
-        const whitSprite = Sprites.getWhit('cry', 4);
-        loseCtx.drawImage(whitSprite, 70, 50);
+        loseCtx.save();
+        loseCtx.translate(70, 50);
+        loseCtx.scale(4, 4);
+        Sprites.drawWhit(loseCtx, 0, 0, 'cry');
+        loseCtx.restore();
 
         // Tears
         loseCtx.fillStyle = '#60a5fa';
